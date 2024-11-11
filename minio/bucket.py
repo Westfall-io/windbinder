@@ -45,15 +45,26 @@ def download_dependent_output(client, action_prev):
     # overwrite with new input after this step
     shutil.unpack_archive("output"+prev_thread_name+".zip", VOLUME, "zip")
 
-def create_input_bucket(client, action):
+def create_bucket(client, action, name='input', tmp_location='tmp'):
     # Make an archive of the input bucket
     print('Making an archive for storage.')
-    shutil.make_archive('input'+thread_name, 'zip', 'tmp')
+    shutil.make_archive(name+thread_name, 'zip', tmp_location)
+
+    # Create a retention date
+    retention_date = datetime.utcnow().replace(
+        hour=0, minute=0, second=0, microsecond=0,
+    ) + timedelta(days=MINIORETENTIONDAYS)
+
+    # Tag it as the named bucket (either input or output typically)
+    tags = Tags(for_object=True)
+    tags["type"] = name
 
     print('Uploading to Minio')
     try:
         # Get the bucket
         bucket = parse_bucket_name(action["qualifiedName"])
+
+        # Make a bucket if needed
         found = client.bucket_exists(bucket)
         if not found:
             client.make_bucket(bucket, object_lock=True)
@@ -61,26 +72,12 @@ def create_input_bucket(client, action):
         else:
             print("Bucket already exists!")
 
-        # Create a retention date
-        retention_date = datetime.utcnow().replace(
-            hour=0, minute=0, second=0, microsecond=0,
-        ) + timedelta(days=MINIORETENTIONDAYS)
-
-        # Tag it as an input type bucket
-        tags = Tags(for_object=True)
-        tags["type"] = "input"
-
         # Upload
         client.fput_object(
-            bucket, 'input'+thread_name+'.zip', 'input'+thread_name+'.zip',
+            bucket, name+'_'+thread_name+'.zip', name+'_'+thread_name+'.zip',
             tags=tags,
             retention=Retention(GOVERNANCE, retention_date)
         )
-
-        # Check if we can download the file
-        #objects = client.list_objects(bucket)
-        #for item in client.list_objects(bucket,recursive=True):
-        #    client.fget_object(bucket,item.object_name,'inputdl.zip')
 
     except S3Error as exc:
         print("error occurred.", exc)

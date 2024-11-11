@@ -128,3 +128,52 @@ def template_render(action):
             # Overwrite anything in the current folder with the artifact
             with open(os.path.join(VOLUME,dir_path[8:],name), 'w') as f:
                 f.write(template.render(digitalforge=digitalforge,**variables))
+
+def update_verification(vid, error):
+    r = requests.put(
+        WINDSTORMAPIHOST+"models/verifications/{}?verify={}".format(
+            vid,
+            not error
+        )
+    )
+
+def find_dependent_tasks_by_id(token, action):
+    # Check if this action has dependent tasks.
+    print('Checking if this action has dependent tasks.')
+    r = requests.get(
+        WINDSTORMAPIHOST+"models/threads/dependency/{}?validate=true".format(
+            action['id']
+        )
+    )
+
+    # See if errors are returned
+    if isinstance(r.json()['results'], dict):
+        if 'error' in r.json()['results']:
+            # No dependencies
+            print('Received error from API: {}'.format(r.json()['results']['error']))
+            print('Complete no dependencies for action {}.'.format(action['id']))
+            return ''
+
+    # This action returned from dependency
+    return r.json()['results'][0]
+
+def execute_dependent_thread(token, action, thread_name):
+    # Create a new thread
+    r = requests.put(
+        WINDSTORMAPIHOST+"auth/add_thread/{}".format(
+            action["id"]
+        )
+    )
+
+    thread = r.json()["thread"]
+    if thread == action:
+        print('Same action found')
+    else:
+        print("Warning: These actions did not match")
+
+    thread_execution_id2 = r.json()["thread_execution_id"]
+    print('Submitting action {} for workflow.'.format(action['id']))
+    requests.post(WINDRUNNERHOST, json = {
+        'action': thread,
+        'thread_execution': thread_execution_id2,
+        'prev_thread_name': thread_name})

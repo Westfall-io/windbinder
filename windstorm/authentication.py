@@ -43,3 +43,18 @@ def login_windstorm_api():
     token_raw = json.loads(r.text)
     token = token_raw["access_token"]
     return token
+
+def update_thread_status(token, thread_execution_id, name):
+    print('Updating thread execution {} status'.format(thread_execution_id))
+    r = requests.put(
+        WINDSTORMAPIHOST+"auth/update_thread/{}".format(
+            thread_execution_id
+        ), json ={'status':name}
+    )
+    if r.status_code != 200:
+        print('Failed to update status')
+        thread_name = ''
+    else:
+        thread_name = r.json()['name']
+
+    return thread_name
