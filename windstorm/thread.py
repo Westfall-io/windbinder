@@ -53,7 +53,7 @@ def check_thread_dependency(action, prev_thread_name):
 
     if action['dependency'] is None:
         # This action has no dependencies.
-        return None
+        return action, None
 
     # This is a dependent action.
     r = requests.get(
