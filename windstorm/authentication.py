@@ -38,7 +38,7 @@ def login_windstorm_api():
     }
 
     url = KEYCLOAKHOST + '/realms/' + \
-          KEYCLOAKREALM + '/protocol/openid-connect/auth'
+          KEYCLOAKREALM + '/protocol/openid-connect/token'
 
     r = requests.post(url, data=body, headers=headers)
     print(r.text)
