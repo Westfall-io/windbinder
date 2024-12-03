@@ -27,7 +27,7 @@ from minio.retention import Retention
 def parse_bucket_name(qualifiedName):
     bucket = qualifiedName.lower().strip().replace('_', '-'). \
         replace("'", "").replace('"', "").replace("\\","").replace("/",""). \
-        replace("::", ".")
+        replace("::", ".").replace(" ","-")
 
     if len(bucket) > 63:
         bucket = bucket[:63]
