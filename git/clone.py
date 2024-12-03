@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from env import GITHOST, VOLUME
+from env import GITHOST, GITUSER, GITPASS, VOLUME
 
 import os
 
@@ -33,7 +33,7 @@ def clone(action):
     print('Downloading git repo for input artifacts.')
     path = parse_repopath(action['artifact']['full_name'], action['artifact']['ref'])
     #print(path)
-    ipath = os.path.join(GITHOST,path['org'], path['repo'])
+    ipath = os.path.join(f"https://{GITUSER}:{GITPASS}@"+GITHOST,path['org'], path['repo'])
 
     # Download the git repo for the artifact
     print('Downloading the repo.')
