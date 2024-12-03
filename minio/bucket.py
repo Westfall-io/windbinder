@@ -36,7 +36,7 @@ def parse_bucket_name(qualifiedName):
 
     return bucket
 
-def download_dependent_output(client, action_prev):
+def download_dependent_output(client, action_prev, prev_thread_name):
     bucket = parse_bucket_name(action_prev["qualifiedName"])
     print('Downloading and unzipping prior dependency output.')
     client.fget_object(bucket,"output"+prev_thread_name+".zip", "output"+prev_thread_name+".zip")
@@ -45,7 +45,7 @@ def download_dependent_output(client, action_prev):
     # overwrite with new input after this step
     shutil.unpack_archive("output"+prev_thread_name+".zip", VOLUME, "zip")
 
-def create_bucket(client, action, name='input', tmp_location='tmp'):
+def create_bucket(client, action, thread_name, name='input', tmp_location='tmp'):
     # Make an archive of the input bucket
     print('Making an archive for storage.')
     shutil.make_archive(name+thread_name, 'zip', tmp_location)
