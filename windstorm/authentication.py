@@ -41,6 +41,7 @@ def login_windstorm_api():
           KEYCLOAKREALM + '/protocol/openid-connect/auth'
 
     r = requests.post(url, data=body, headers=headers)
+    print(r.text)
     token_raw = json.loads(r.text)
     token = token_raw["access_token"]
     return token
