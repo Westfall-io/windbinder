@@ -38,6 +38,13 @@ def clone(action):
     # Download the git repo for the artifact
     print('Downloading the repo.')
     repo = git.Repo.clone_from(ipath, 'artifact')
+    print('-'*40)
+    print('Listing the branches')
+    remote_refs = repo.remote().refs
+    for refs in remote_refs:
+        print('   {}'.format(refs.name))
+    print('-'*40)
+    print('Checking out branch: {}'.format(path['ref']))
     repo.git.checkout(path['ref'])
     return repo
 
