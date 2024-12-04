@@ -85,9 +85,10 @@ def copy_file(file):
             os.path.join(VOLUME, file),
             os.path.join('/tmp/digitalforge', file)
         )
+        return None
     except:
         # If we run into a file that we can't copy, just forget it ever existed.
-        continue
+        return None
 
 def check_files(files):
     error = False # All junit files didn't return an error
