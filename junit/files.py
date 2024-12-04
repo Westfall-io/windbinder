@@ -87,7 +87,8 @@ def copy_file(file):
             os.path.join('/tmp/digitalforge', file)
         )
         return None
-    except:
+    except Exception as e:
+        print('Error when copying file. '+e)
         # If we run into a file that we can't copy, just forget it ever existed.
         return None
 
