@@ -95,11 +95,16 @@ def copy_file(file):
 def check_files(files):
     error = None # All junit files didn't return an error
     for file in files:
-        if error is None:
-            error = find_junit(file)
-        else:
-            if not error: # Haven't already found an error
+            if error is None:
                 error = find_junit(file)
+            else:
+                # Error is true/false
+                if not error: # Haven't already found an error
+                    error2 = find_junit(file)
+
+                if error2 is not None:
+                    # Only update error if the result is a junit file.
+                    error = error2
 
         copy_file(file)
 
