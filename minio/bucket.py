@@ -61,10 +61,9 @@ def create_bucket(client, action, thread_name, name='input', tmp_location='tmp')
     tags["type"] = name
 
     print('Uploading to Minio')
+    # Get the bucket
+    bucket = parse_bucket_name(action["qualifiedName"])
     try:
-        # Get the bucket
-        bucket = parse_bucket_name(action["qualifiedName"])
-
         # Make a bucket if needed
         found = client.bucket_exists(bucket)
         if not found:
@@ -72,14 +71,16 @@ def create_bucket(client, action, thread_name, name='input', tmp_location='tmp')
             print("Bucket made!")
         else:
             print("Bucket already exists!")
+    except S3Error as exc:
+        print("error occurred.", exc)
 
-        print("Uploading file name: {}".format(fname+".zip"))
+    print("Uploading file name: {}".format(fname+".zip"))
+    try:
         # Upload
         client.fput_object(
             bucket, fname+'.zip', fname+'.zip',
             tags=tags,
             retention=Retention(GOVERNANCE, retention_date)
         )
-
     except S3Error as exc:
         print("error occurred.", exc)
