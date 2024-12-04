@@ -139,6 +139,13 @@ def update_verification(token, vid, error):
         headers={'Authorization': 'Bearer '+token}
     )
 
+    if r.status_code != 200:
+        print('Failed to update verification: {}.\n Status should be {}'.format(vid, not error))
+    else:
+        print('Updated verification: {}.\n Status should be {}'.format(vid, not error))
+
+    return None
+
 def find_dependent_tasks_by_id(token, action):
     # Check if this action has dependent tasks.
     print('Checking if this action has dependent tasks.')
