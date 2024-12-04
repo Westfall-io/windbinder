@@ -41,12 +41,13 @@ def login_windstorm_api():
           KEYCLOAKREALM + '/protocol/openid-connect/token'
 
     r = requests.post(url, data=body, headers=headers)
-    print(r.text)
+    #print(r.text)
     token_raw = json.loads(r.text)
     token = token_raw["access_token"]
     return token
 
 def update_thread_status(token, thread_execution_id, name):
+    print('Using token: {}'.format(token))
     print('Updating thread execution {} status'.format(thread_execution_id))
     r = requests.put(
         WINDSTORMAPIHOST+"auth/update_thread/{}".format(
