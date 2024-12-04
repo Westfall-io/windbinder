@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from env import *
 
-import os
+import os, shutil
 
 from junitparser import JUnitXml, Error, Failure
 
@@ -88,7 +88,7 @@ def copy_file(file):
         )
         return None
     except Exception as e:
-        print('Error when copying file. '+e)
+        print('Error when copying file. '+str(e))
         # If we run into a file that we can't copy, just forget it ever existed.
         return None
 
