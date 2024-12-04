@@ -49,6 +49,12 @@ def create_bucket(client, action, thread_name, name='input', tmp_location='tmp')
     # Make an archive of the input bucket
     print('Making an archive for storage from directory: {}.'.format(tmp_location))
     fname = name+'-'+thread_name
+
+    # Print all files being zipped
+    import os
+    file_list=os.listdir(tmp_location)
+    print(file_list)
+
     shutil.make_archive(fname, 'zip', tmp_location)
 
     # Create a retention date

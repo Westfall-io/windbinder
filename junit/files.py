@@ -75,7 +75,7 @@ def find_junit_errors(xml):
 def find_junit(file):
     check, xml = check_is_junit(file)
     if not check:
-        return False
+        return None
 
     error = find_junit_errors(file)
     return error
@@ -92,10 +92,13 @@ def copy_file(file):
         return None
 
 def check_files(files):
-    error = False # All junit files didn't return an error
+    error = None # All junit files didn't return an error
     for file in files:
-        if not error: # Haven't already found an error
+        if error is None:
             error = find_junit(file)
+        else:
+            if not error: # Haven't already found an error
+                error = find_junit(file)
 
         copy_file(file)
 
