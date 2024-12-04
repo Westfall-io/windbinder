@@ -48,7 +48,7 @@ def download_dependent_output(client, action_prev, prev_thread_name):
 def create_bucket(client, action, thread_name, name='input', tmp_location='tmp'):
     # Make an archive of the input bucket
     print('Making an archive for storage.')
-    shutil.make_archive(name+thread_name, 'zip', tmp_location)
+    shutil.make_archive(name+'_'+thread_name, 'zip', tmp_location)
 
     # Create a retention date
     retention_date = datetime.utcnow().replace(
