@@ -52,6 +52,8 @@ def create_bucket(client, action, thread_name, name='input', tmp_location='tmp')
 
     # Print all files being zipped
     import os
+    file_list=os.listdir(VOLUME)
+    print(file_list)
     file_list=os.listdir(tmp_location)
     print(file_list)
 
