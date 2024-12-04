@@ -130,12 +130,13 @@ def template_render(action):
             with open(os.path.join(VOLUME,dir_path[8:],name), 'w') as f:
                 f.write(template.render(digitalforge=digitalforge,**variables))
 
-def update_verification(vid, error):
+def update_verification(token, vid, error):
     r = requests.put(
         WINDSTORMAPIHOST+"models/verifications/{}?verify={}".format(
             vid,
             not error
-        )
+        ),
+        headers={'Authorization': 'Bearer '+token}
     )
 
 def find_dependent_tasks_by_id(token, action):
@@ -164,6 +165,7 @@ def execute_dependent_thread(token, action, thread_name):
         WINDSTORMAPIHOST+"auth/add_thread/{}".format(
             action["id"]
         )
+        headers={'Authorization': 'Bearer '+token}
     )
 
     thread = r.json()["thread"]
