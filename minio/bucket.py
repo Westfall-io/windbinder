@@ -39,16 +39,17 @@ def parse_bucket_name(qualifiedName):
 def download_dependent_output(client, action_prev, prev_thread_name):
     bucket = parse_bucket_name(action_prev["qualifiedName"])
     print('Downloading and unzipping prior dependency output.')
-    client.fget_object(bucket,"output"+prev_thread_name+".zip", "output"+prev_thread_name+".zip")
+    client.fget_object(bucket,"output-"+prev_thread_name+".zip", "output"+prev_thread_name+".zip")
 
     # Overwrite the base image with output from the dependency, we'll
     # overwrite with new input after this step
-    shutil.unpack_archive("output"+prev_thread_name+".zip", VOLUME, "zip")
+    shutil.unpack_archive("output-"+prev_thread_name+".zip", VOLUME, "zip")
 
 def create_bucket(client, action, thread_name, name='input', tmp_location='tmp'):
     # Make an archive of the input bucket
     print('Making an archive for storage.')
-    shutil.make_archive(name+'_'+thread_name, 'zip', tmp_location)
+    fname = name+'-'+thread_name
+    shutil.make_archive(fname, 'zip', tmp_location)
 
     # Create a retention date
     retention_date = datetime.utcnow().replace(
@@ -72,9 +73,10 @@ def create_bucket(client, action, thread_name, name='input', tmp_location='tmp')
         else:
             print("Bucket already exists!")
 
+        print("Uploading file name: {}".format(fname+".zip"))
         # Upload
         client.fput_object(
-            bucket, name+'_'+thread_name+'.zip', name+'_'+thread_name+'.zip',
+            bucket, fname+'.zip', fname+'.zip',
             tags=tags,
             retention=Retention(GOVERNANCE, retention_date)
         )
