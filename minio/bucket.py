@@ -47,7 +47,7 @@ def download_dependent_output(client, action_prev, prev_thread_name):
 
 def create_bucket(client, action, thread_name, name='input', tmp_location='tmp'):
     # Make an archive of the input bucket
-    print('Making an archive for storage.')
+    print('Making an archive for storage from directory: {}.'.format(tmp_location))
     fname = name+'-'+thread_name
     shutil.make_archive(fname, 'zip', tmp_location)
 

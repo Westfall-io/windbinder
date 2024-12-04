@@ -42,7 +42,7 @@ def check_is_junit(file):
         return xml != '', xml
     else:
         # This didn't have the correct file type for junit
-        print('File type: {} found.'.format(ext))
+        print('File type: {} found in file {}.'.format(ext, file))
         return False, ''
 
 
@@ -75,7 +75,7 @@ def find_junit_errors(xml):
 def find_junit(file):
     check, xml = check_is_junit(file)
     if not check:
-        return
+        return False
 
     error = find_junit_errors(file)
     return error
