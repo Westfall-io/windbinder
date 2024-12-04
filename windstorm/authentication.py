@@ -53,7 +53,7 @@ def update_thread_status(token, thread_execution_id, name):
         WINDSTORMAPIHOST+"auth/update_thread/{}".format(
             thread_execution_id
         ), json ={'status':name},
-        headers={'Authorization': 'access_token '+token}
+        headers={'Authorization': 'Bearer '+token}
     )
     if r.status_code != 200:
         print('Failed to update status')
