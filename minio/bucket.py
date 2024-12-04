@@ -39,7 +39,7 @@ def parse_bucket_name(qualifiedName):
 def download_dependent_output(client, action_prev, prev_thread_name):
     bucket = parse_bucket_name(action_prev["qualifiedName"])
     print('Downloading and unzipping prior dependency output.')
-    client.fget_object(bucket,"output-"+prev_thread_name+".zip", "output"+prev_thread_name+".zip")
+    client.fget_object(bucket,"output-"+prev_thread_name+".zip", "output-"+prev_thread_name+".zip")
 
     # Overwrite the base image with output from the dependency, we'll
     # overwrite with new input after this step
