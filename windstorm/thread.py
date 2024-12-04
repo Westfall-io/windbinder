@@ -164,7 +164,7 @@ def execute_dependent_thread(token, action, thread_name):
     r = requests.put(
         WINDSTORMAPIHOST+"auth/add_thread/{}".format(
             action["id"]
-        )
+        ),
         headers={'Authorization': 'Bearer '+token}
     )
 
