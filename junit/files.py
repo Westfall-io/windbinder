@@ -39,11 +39,12 @@ def check_is_junit(file):
             # This couldn't be parsed.
             print("File {} wasn't a readable junit report.".format(file))
             xml = ''
+        return xml != '', xml
     else:
         # This didn't have the correct file type for junit
         print('File type: {} found.'.format(ext))
+        return False, ''
 
-    return xml != '', xml
 
 def handle_junit_case(case):
     # Handle case
