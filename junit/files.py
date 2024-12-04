@@ -77,7 +77,7 @@ def find_junit(file):
     if not check:
         return None
 
-    error = find_junit_errors(file)
+    error = find_junit_errors(xml)
     return error
 
 def copy_file(file):
